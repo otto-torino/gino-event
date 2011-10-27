@@ -10,7 +10,7 @@ class eventItem extends propertyObject implements eventInt {
 	public static $_tbl_newsletter = "newsletter";
 	public static $_tbl_newsletter_item = "newsletter_item";
 	
-	private static $_fck_toolbar = 'Image';
+	private static $_fck_toolbar = 'Full';
 	private static $_fck_height = 200;
 	private static $_fck_width = '100%';
 	public static $extension_media = array('jpg', 'png');
