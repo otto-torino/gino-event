@@ -1,0 +1,396 @@
+li.checkbox, li.sortable, li.listLine {
+	list-style-type: none;
+}
+li.checkbox .liTitle {
+	margin-top:2px;
+	font-weight: normal;
+}
+
+section#list_event {
+
+}
+section#item_event {
+
+}
+
+/* Calendario */
+
+section#cal_calendar {
+
+}
+section#cal_calendar div.calContainer {
+}
+section#cal_calendar div.calContainer a:link, section#cal_calendar div.calContainer a:visited, section#cal_calendar div.calContainer span.link {
+	color:#000;
+}
+section#cal_calendar table.calendarContainer {
+	border-collapse:separate;
+	background-color:#333300;
+}
+
+section#cal_calendar td.calendarLeft {
+	background-color:#cccc99;
+	border:1px solid #fff;
+	width:140px;
+}
+
+section#cal_calendar td.calendarRight {
+	border:1px solid #fff;
+	width:218px;
+}
+section#cal_calendar div.calendarActualDay {
+	background-color:#333300;
+	margin:-2px;
+}
+section#cal_calendar div.calendarActualDay table {
+	margin:auto;
+}
+section#cal_calendar td.dayLetter {
+	vertical-align:middle;
+	color:#fff;
+	font-weight:bold;
+	font-size:14px;
+}
+section#cal_calendar td.dayNumber {
+	color:#ffff00;
+	font-size:26px;
+	font-weight:bold;
+}
+section#cal_calendar div.eventItems {
+	margin:2px -2px 0px -2px;
+}
+section#cal_calendar div.eventItems div.eventItemsTitle {
+	background-color:#666600;
+	color:#fff;
+	text-align:center;
+}
+section#cal_calendar div.eventItemsFieldWide {
+	max-height:110px;
+	overflow:auto;
+}
+section#cal_calendar div.eventItemsFieldWide ul {
+	list-style-image:url('img/lista_mini.gif');
+	text-indent:0px;
+	list-style-position:inline;
+	margin-left:20px;
+	padding:0px;
+#	list-style-image: url('img/lista_mini_ie.gif');
+}
+
+section#cal_calendar table.calendarTop {
+	color:#ffff00;
+	text-align:center;
+	margin:auto;
+}
+section#cal_calendar table.calendarTop td.previousMonth {
+	cursor:pointer;
+	width:10px;
+	background:url('img/freccinaSX.png');
+	background-repeat:no-repeat;
+	background-position:center center;
+}
+section#cal_calendar table.calendarTop td.nextMonth {
+	cursor:pointer;
+	width:8px;
+	background:url('img/freccinaDX.png');
+	background-repeat:no-repeat;
+	background-position:center center;
+}
+section#cal_calendar table.calendarBody {
+	color:#fff;
+	margin:auto;
+	font-weight:bold;
+}
+section#cal_calendar table.calendarBody td {
+	border-left: 1px solid #fff;
+	text-align:right;
+	padding:4px;
+}
+section#cal_calendar table.calendarBody .day {
+	cursor:pointer;
+}
+
+section#cal_calendar table.calendarBody .day_sel {
+	color: #333300;
+	background-color:#fff;
+	padding:0px 0px;
+}
+section#cal_calendar table.calendarBody .day_event {
+	cursor:pointer;
+	color: #ffff00;
+	padding:0px 0px;
+}
+section#cal_calendar table.calendarBody .day_event_sel {
+	cursor:pointer;
+	color: #333300;
+	background-color:#fff;
+	padding:0px 0px;
+}
+section#cal_calendar table.calendarBody .day_today {
+	cursor:pointer;
+	color: #fff;
+	padding:0px 0px;
+	border-bottom:2px solid #fff;
+}
+section#cal_calendar table.calendarBody .day_today_event {
+	cursor:pointer;
+	color: #ffff00;
+	padding:0px 0px;
+	border-bottom:2px solid #fff;
+}
+
+section#cal_calendar table.calendarBody .day_today_sel {
+	color: #333300;
+	background-color:#fff;
+	border-bottom:2px solid #fff;
+	padding:0px 0px;
+}
+section#cal_calendar table.calendarBody .day_today_event_sel {
+	color: #333300;
+	background-color:#fff;
+	border-bottom:2px solid #fff;
+	padding:0px 0px;
+}
+
+section#cal_calendar div.calendarEventsLayer {
+	text-align:left;
+	position:absolute;
+	top:0;
+	left:0;   /* right for panel view on the right side of the number */
+	z-index:10;
+	border:2px solid #fff;
+	background-color:#666600;
+	width:188px;
+	height:160px;
+	display:hidden;
+}
+section#cal_calendar div.calendarEventsField {
+	color:#000;
+	background-color:#cccc99;
+	height: 142px;
+	margin:2px 2px 0px 2px;
+	font-weight:normal;
+	overflow:auto;
+}
+section#cal_calendar div.calendarEventsField a:link, section#cal_calendar div.calendarEventsField a:visited {
+	text-decoration:none;
+}
+section#cal_calendar div.calendarEventsField a:hover {
+	text-decoration: underline;
+} 
+section#cal_calendar div.calendarEventsField ul {
+	color:#000;
+	list-style-image:url('img/lista_mini.gif');
+	text-indent:0px;
+	list-style-position:inline;
+	margin-left:20px;
+	padding:0px;
+#	list-style-image: url('img/lista_mini_ie.gif');
+}
+
+section#cal_calendar div#calendarLayerClose {
+	float:right;
+	margin-top:3px;
+	margin-right:3px;
+	width:9px;
+	height:9px;
+	background:url('img/ico_miniclose.gif');
+	cursor:pointer;
+}
+/* Fine Calendario */
+
+section#item_event .card_img {
+	border:1px solid #000;
+	float:left;
+	margin:10px;
+}
+section#item_event .card_mainInfo {
+	margin-top:20px;
+}
+section#item_event .card_ctg {
+	background-color:#99ccff;
+	text-align:right;
+	padding:3px;
+	font-weight:bold;
+}
+section#item_event .card_loc {
+	background-color:#99ccff;
+	text-align:right;
+	padding:3px;
+	font-weight:bold;
+}
+section#item_event .card_start {
+	background-color:#b3d9ff;
+	text-align:right;
+	padding:3px;
+	font-weight:bold;
+}
+section#item_event .card_duration {
+	background-color:#cfe7ff;
+	text-align:right;
+	padding:3px;
+	font-weight:bold;
+}
+section#item_event .card_value {
+	padding:3px;
+}
+section#item_event .card_info {
+	clear:both;
+}
+section#item_event .card_desc {
+}
+section#item_event .card_hr {
+	border:none;
+	color:#ccc;
+	background-color:#ccc;
+}
+
+section#item_event div.evtListItem a:visited, section#item_event div.evtListItem a:link {
+	color:#000;
+	text-decoration:none;
+}
+section#item_event div.evtListItem a:hover {
+	text-decoration:underline;
+}
+section#cal_calendar div.evtListItem span.date {
+	color:#999;
+}
+section#ctgA_event {
+
+}
+section#ctgB_event {
+
+}
+section#ctgC_event {
+
+}
+section#ctgD_event {
+
+}
+
+/*
+Blocco lista
+*/
+section#rnd_event {
+	background-color:#F1E1C8;
+	border-bottom:2px double #AD7748;
+}
+section#rnd_event div.HL_media{
+	float: left;
+	width:30%;
+	margin-right: 5px;
+}
+section#rnd_event div.HL_content{
+	float: left;
+	width:69%;
+}
+section#rnd_event div.HL_evt_ctg {
+	padding-left:6px;
+}
+section#rnd_event div.HL_evt_date {
+	font-weight:bold;
+	padding-left:6px;
+}
+section#rnd_event div.HL_evt_name { 
+	font-size:12px;
+	font-style: italic;
+	padding: 0 6px;
+}
+section#rnd_event div.HL_evt_image {
+	padding-left:6px;
+}
+section#rnd_event div.HL_evt_informations {
+	padding-left:6px;
+}
+section#rnd_event div.HL_evt_description {
+	padding-left:6px;
+}
+section#rnd_event div.HL_evt_link {
+	padding-left:6px;
+}
+section#rnd_event p.line{
+	border-top:1px solid #000;
+}
+
+/*
+Blocco lista (selezione B)
+*/
+section#rndSelB_event {
+	padding-bottom:8px;
+}
+section#rndSelB_event table {
+	width: 100%;
+}
+section#rndSelB_event td {
+	border-right: 1px solid;
+}
+section#rndSelB_event div.HL_media{
+	float: left;
+	margin-right: 5px;
+}
+section#rndSelB_event div.HL_content{
+	/*float: left;*/
+}
+section#rndSelB_event div.HL_evt_date {
+	display: block;
+	padding-left:0px;
+	font-size:10px;
+	font-style: italic;
+	font-weight: bold;
+	color:#666;
+}
+section#rndSelB_event div.HL_evt_name { 
+	margin-top: 4px;
+	margin-bottom: 8px;
+	font-size:12px;
+	font-style: italic;
+	font-weight: bold;
+	padding: 0px;
+	color: #9D916F;
+}
+section#rndSelB_event div.HL_evt_image {
+	padding-left:0px;
+}
+section#rndSelB_event div.HL_evt_image img {
+	border:2px #9D916F solid;
+}
+section#rndSelB_event div.HL_evt_informations {
+	padding-left:0px;
+}
+section#rndSelB_event div.HL_evt_description {
+	padding-left:0px;
+}
+section#rndSelB_event div.HL_evt_link {
+	padding-left:0px;
+	margin-top:5px;
+}
+
+/* Separatore */
+div.listLine {
+	height: 5px;
+	margin: 5px 0px;
+}
+div.lineLeft {
+	float:left;
+	background: url('img/line_sx.png');
+	background-position:left center;
+	background-repeat: no-repeat;
+	width: 2%;
+	height: 5px;
+}
+div.lineCenter {
+	float:left;
+	background: url('img/line_center.png');
+	background-position:center center;
+	background-repeat: no-repeat;
+	width: 96%;
+	height: 5px;
+}
+div.lineRight {
+	float:right;
+	background: url('img/line_dx.png');
+	background-position:right center;
+	background-repeat: no-repeat;
+	width: 2%;
+	height: 5px;
+}

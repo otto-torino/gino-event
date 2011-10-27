@@ -1,4 +1,9 @@
 ===================================================================
 event library for gino CMS by Otto Srl, MIT license
 ===================================================================
-Applicazione per la gestione di eventi e similari.
+Libreria per la gestione di eventi e similari.
+
+* INSTALLAZIONE
+Per installare questa libreria creare un pacchetto zip con tutti i file (event_pkg.zip).
+
+* PROCEDURA PER PERSONALIZZARE LA LIBRERIA

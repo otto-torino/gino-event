@@ -1,0 +1,1 @@
+name:"event",version:"1.0",type:"class",role1:"0",role2:"0",role3:"0",role_group:"1",tbl_name:"event",instance:"yes",description:"Gestore dei eventi",removable:"yes",folders:"contents/event"
