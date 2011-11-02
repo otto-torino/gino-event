@@ -4,7 +4,7 @@ require_once('interface.event.php');
 
 class eventItem extends propertyObject implements eventInt {
 
-	public static $_tbl_event = "event";
+	public static $_tbl_item = "event";
 	public static $_tbl_selection = "event_sel";
 	public static $_tbl_selection_b = "event_sel_b";
 	public static $_tbl_newsletter = "newsletter";
@@ -20,14 +20,14 @@ class eventItem extends propertyObject implements eventInt {
 
 	function __construct($id) {
 		
-		$this->_tbl_data = self::$_tbl_event;
+		$this->_tbl_data = self::$_tbl_item;
 		parent::__construct($this->initP($id));
 	}
 	
 	private function initP($id) {
 	
 		$db = new db;
-		$query = "SELECT * FROM ".self::$_tbl_event." WHERE id='$id'";
+		$query = "SELECT * FROM ".self::$_tbl_item." WHERE id='$id'";
 		$a = $db->selectquery($query);
 		if(sizeof($a)>0) return $a[0]; 
 		else return array('id'=>null, 'instance'=>null, 'ctg'=>null, 'name'=>null, 'date'=>null, 'hours'=>null, 'location'=>null, 'duration'=>null, 'informations'=>null, 'description'=>null, 'summary'=>null, 'image'=>null, 'attachment'=>null, 'private'=>null, 'lng'=>null, 'lat'=>null);
@@ -354,9 +354,9 @@ class eventItem extends propertyObject implements eventInt {
 		return $buffer;
 	}
 	
-	public function formEvent($formaction, $interface, $property=null) {
+	public function formItem($formaction, $interface, $property=null) {
 
-		$gform = new Form('eform', 'post', true, array("trnsl_table"=>self::$_tbl_event, "trnsl_id"=>$this->id));
+		$gform = new Form('eform', 'post', true, array("trnsl_table"=>self::$_tbl_item, "trnsl_id"=>$this->id));
 		$gform->load('dataform');
 
 		if($this->_p['id'])
@@ -431,7 +431,7 @@ class eventItem extends propertyObject implements eventInt {
 		return $htmlsection->render();
 	}
 	
-	public function formDelEvent($formaction) {
+	public function formDelItem($formaction) {
 	
 		$gform = new Form('gform', 'post', false);
 		
@@ -456,7 +456,7 @@ class eventItem extends propertyObject implements eventInt {
 		if(empty($id)) return false;
 		
 		$db = new db;
-		$query = "DELETE FROM ".self::$_tbl_event." WHERE id='$id'";
+		$query = "DELETE FROM ".self::$_tbl_item." WHERE id='$id'";
 		$result = $db->actionquery($query);
 		if($result)
 		{
@@ -489,7 +489,7 @@ class eventItem extends propertyObject implements eventInt {
 		}
 		
 		$db = new db;
-		$query = "SELECT COUNT(id) AS tot FROM ".self::$_tbl_event." $where_query";
+		$query = "SELECT COUNT(id) AS tot FROM ".self::$_tbl_item." $where_query";
 		$a = $db->selectquery($query);
 		return sizeof($a)>0 ? $a[0]['tot'] : 0;
 	}
@@ -520,7 +520,7 @@ class eventItem extends propertyObject implements eventInt {
 		if($range) $range = "LIMIT $start,$range";
 		
 		$db = new db;
-		$query = "SELECT id FROM ".self::$_tbl_event." $where_query ORDER BY $order $sort $range";
+		$query = "SELECT id FROM ".self::$_tbl_item." $where_query ORDER BY $order $sort $range";
 		$a = $db->selectquery($query);
 		if(sizeof($a))
 			foreach($a as $b) $items[] = new eventItem($b['id']);
@@ -528,7 +528,7 @@ class eventItem extends propertyObject implements eventInt {
 	}
 
 	// Eventi che sono in programma in un dato giorno
-	public static function getDateEvents($instance, $date, $ctg=null, $private=false, $bool=false) {
+	public static function getDateItems($instance, $date, $ctg=null, $private=false, $bool=false) {
 	
 		$evts = array();
 		$db = new db;
@@ -536,7 +536,7 @@ class eventItem extends propertyObject implements eventInt {
 		$where_private = ($private)?"":"AND private='no'";
 		$date = "date<='$date' AND ADDDATE(date, INTERVAL duration-1 DAY)>='$date'";
 		
-		$query = "SELECT id FROM ".self::$_tbl_event." WHERE instance='$instance' AND $date $where_ctg $where_private ORDER BY date ASC";
+		$query = "SELECT id FROM ".self::$_tbl_item." WHERE instance='$instance' AND $date $where_ctg $where_private ORDER BY date ASC";
 		$a = $db->selectquery($query);
 		if(sizeof($a)) {
 			if($bool) return true;

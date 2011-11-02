@@ -161,19 +161,19 @@ class event extends AbstractEvtClass {
 			"ctgViewerA_pag"=>array('label'=>array(_("Categoria A - paginazione eventi"), _("'no': visualizza solo gli eventi indicati nell'opzione precedente"))),
 			"ctgViewerB_id"=>array('label'=>array(_("Categoria B - id"), _("indicare il codice identificativo della categoria"))),
 			"ctgViewerB_title"=>array('label'=>array(_("Categoria B - titolo pagina"), _("'NULL': nessun titolo"))),
-			"ctgViewerB_num"=>array('label'=>_("Categoria B - numero ultimi eventi")),
+			"ctgViewerB_num"=>array('label'=>_("Categoria B - numero eventi per pagina")),
 			"ctgViewerB_pag"=>array('label'=>array(_("Categoria B - paginazione eventi"), _("'no': visualizza solo gli eventi indicati nell'opzione precedente"))),
 			"ctgViewerC_id"=>array('label'=>array(_("Categoria C - id"), _("indicare il codice identificativo della categoria"))),
 			"ctgViewerC_title"=>array('label'=>array(_("Categoria C - titolo pagina"), _("'NULL': nessun titolo"))),
-			"ctgViewerC_num"=>array('label'=>_("Categoria C - numero ultimi eventi")),
+			"ctgViewerC_num"=>array('label'=>_("Categoria C - numero eventi per pagina")),
 			"ctgViewerC_pag"=>array('label'=>array(_("Categoria C - paginazione eventi"), _("'no': visualizza solo gli eventi indicati nell'opzione precedente"))),
 			"ctgViewerD_id"=>array('label'=>array(_("Categoria D - id"), _("indicare il codice identificativo della categoria"))),
 			"ctgViewerD_title"=>array('label'=>array(_("Categoria D - titolo pagina"), _("'NULL': nessun titolo"))),
-			"ctgViewerD_num"=>array('label'=>_("Categoria D - numero ultimi eventi")),
+			"ctgViewerD_num"=>array('label'=>_("Categoria D - numero eventi per pagina")),
 			"ctgViewerD_pag"=>array('label'=>array(_("Categoria D - paginazione eventi"), _("'no': visualizza solo gli eventi indicati nell'opzione precedente")))
 		);
 		
-		$this->_view_without_search = false;	// mostra gli eventi anche se non è stata effettuata la ricerca
+		$this->_view_without_search = false;	// mostrare gli eventi quando si accede alla pagina di ricerca
 		
 		$this->_months = array(1=>_("gennaio"), 2=>_("febbraio"), 3=>_("marzo"), 4=>_("aprile"), 5=>_("maggio"), 6=>_("giugno"), 7=>_("luglio"), 8=>_("agosto"), 9=>_("settembre"), 10=>_("ottobre"), 11=>_("novembre"), 12=>_("dicembre"));
 		$this->_days = array(0=>_("domenica"), 1=>_("lunedì"), 2=>_("martedì"), 3=>_("mercoledì"), 4=>_("giovedì"), 5=>_("venerdì"), 6=>_("sabato"));
@@ -214,13 +214,13 @@ class event extends AbstractEvtClass {
 		/*
 		 * delete records and translations from table events
 		 */
-		$query = "SELECT id FROM ".eventItem::$_tbl_event." WHERE instance='$this->_instance'";
+		$query = "SELECT id FROM ".eventItem::$_tbl_item." WHERE instance='$this->_instance'";
 		$a = $this->_db->selectquery($query);
 		if(sizeof($a)>0) 
 			foreach($a as $b) 
-				language::deleteTranslations(eventItem::$_tbl_event, $b['id']);
+				language::deleteTranslations(eventItem::$_tbl_item, $b['id']);
 		
-		$query = "DELETE FROM ".eventItem::$_tbl_event." WHERE instance='$this->_instance'";	
+		$query = "DELETE FROM ".eventItem::$_tbl_item." WHERE instance='$this->_instance'";	
 		$result = $this->_db->actionquery($query);
 		
 		/*
@@ -359,7 +359,7 @@ class event extends AbstractEvtClass {
 		
 		if(!empty($id) AND !empty($field))
 		{
-			$query = "SELECT $field FROM ".eventItem::$_tbl_event." WHERE id='$id'";
+			$query = "SELECT $field FROM ".eventItem::$_tbl_item." WHERE id='$id'";
 			$a = $this->_db->selectquery($query);
 			if(sizeof($a) > 0)
 			{
@@ -924,7 +924,7 @@ class event extends AbstractEvtClass {
 				$GINO .= $list->listReferenceGINO("pt[$this->_instanceName-ajaxCtgList]", true, "type=$type", "cal_ctg".$type."_list$this->_instance", "cal_ctg".$type."_list$this->_instance", true, 'updateTooltips');
 		}
 		else {
-			$GINO .= "<p class=\"message\">"._("Non risultano elementi in calendario")."</p>";
+			$GINO .= "<p class=\"message\">"._("Non risultano elementi nella categoria")."</p>";
 		}
 		return $GINO;
 	}
@@ -1140,7 +1140,7 @@ class event extends AbstractEvtClass {
 		if($iter==date('j') && $vdate['mon']==date('n') && $vdate['year']==date('Y'))  $type[] = 'today'; // data odierna
 		$day = ($iter<10)?"0".$iter:$iter;
 		$month = ($vdate['mon']<10)?"0".$vdate['mon']:$vdate['mon'];
-		if(eventItem::getDateEvents($this->_instance, $vdate['year']."-$month-$day", null, $private, true)) $type[] = 'event'; // eventi presenti
+		if(eventItem::getDateItems($this->_instance, $vdate['year']."-$month-$day", null, $private, true)) $type[] = 'event'; // eventi presenti
 		if($iter==$date['mday'] && $date['mon']==$vdate['mon'] & $date['year']==$vdate['year'])	$type[] = 'sel'; // data selezionata
 		$class = "day";
 		foreach($type as $t) $class .= "_$t";
@@ -1162,7 +1162,7 @@ class event extends AbstractEvtClass {
 		if(!$date) $date = date("Y-m-d");
 
 		$private = ($this->_access->AccessVerifyGroupIf($this->_className, $this->_instance, $this->_user_group, $this->_group_1))?true:false;
-		$evts = eventItem::getDateEvents($this->_instance, $date, $ctg, $private);
+		$evts = eventItem::getDateItems($this->_instance, $date, $ctg, $private);
 
 		if(count($evts)) {
 			$GINO = "<ul>";
@@ -1316,7 +1316,7 @@ class event extends AbstractEvtClass {
 		$start = cleanVar($_GET, 'start', 'int', '');
 		
 		$GINO = "<div class=\"area\">\n";
-		$GINO .=  $event->formEvent($this->_home."?evt[$this->_instanceName-actionEvent]", $this, array('max_char'=>$this->_char_summary, 'start'=>$start));
+		$GINO .=  $event->formItem($this->_home."?evt[$this->_instanceName-actionEvent]", $this, array('max_char'=>$this->_char_summary, 'start'=>$start));
 		$GINO .= "</div>\n";
 
 		return $GINO;
@@ -1325,7 +1325,7 @@ class event extends AbstractEvtClass {
 	private function formDelEvent(eventInt $event) {
 
 		$GINO = "<div class=\"area\">";
-		$GINO .= $event->formDelEvent($this->_home."?evt[$this->_instanceName-actionDelEvent]");
+		$GINO .= $event->formDelItem($this->_home."?evt[$this->_instanceName-actionDelEvent]");
 		$GINO .= "</div>";
 
 		return $GINO;
@@ -1570,14 +1570,14 @@ class event extends AbstractEvtClass {
 		$delete_event = false;	// elimina tutti gli eventi legati alla categoria
 		if($ctg->deleteDbData() && $delete_event)
 		{
-			$query = "SELECT id FROM ".eventItem::$_tbl_event." WHERE ctg='$id' AND instance='$this->_instance'";
+			$query = "SELECT id FROM ".eventItem::$_tbl_item." WHERE ctg='$id' AND instance='$this->_instance'";
 			$a = $this->_db->selectquery($query);
 			if(sizeof($a) > 0)
 			{
 				foreach($a AS $b)
 				{
 					$item = $b['id'];
-					$query_del = "DELETE FROM ".eventItem::$_tbl_event." WHERE id='$item'";
+					$query_del = "DELETE FROM ".eventItem::$_tbl_item." WHERE id='$item'";
 					if($this->_db->actionquery($query_del))
 					{
 						$dir = $this->pathBaseDir($item, 'abs');
@@ -1620,10 +1620,10 @@ class event extends AbstractEvtClass {
 		if($event->updateDbData())
 			$directory = $this->pathDirectory($event->id, 'abs');
 
-		$gform->manageFile('image', $old_img, true, eventItem::$extension_media, $directory.$this->_event_sub[0], $link_error, eventItem::$_tbl_event, 'image', 'id', $event->id, 
+		$gform->manageFile('image', $old_img, true, eventItem::$extension_media, $directory.$this->_event_sub[0], $link_error, eventItem::$_tbl_item, 'image', 'id', $event->id, 
 			array('prefix_file'=>$this->_prefix_img, 'prefix_thumb'=>$this->_prefix_thumb, 'width'=>$this->_img_width, 'thumb_width'=>$this->_thumb_width));
 		
-		$gform->manageFile('attachment', $old_attach, false, eventItem::$extension_attach, $directory.$this->_event_sub[1], $link_error, eventItem::$_tbl_event, 'attachment', 'id', $event->id);
+		$gform->manageFile('attachment', $old_attach, false, eventItem::$extension_attach, $directory.$this->_event_sub[1], $link_error, eventItem::$_tbl_item, 'attachment', 'id', $event->id);
 
 		EvtHandler::HttpCall($this->_home, $this->_instanceName.'-manageDoc', "start=$start");
 	}

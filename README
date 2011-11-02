@@ -39,7 +39,8 @@ Opzioni: categorizzazione, calendarizzazione, selezione (2), ordinamento, agganc
 - titolo pagina eventi personalizzati
 - numero eventi personalizzati per pagina
 - titolo pagina eventi archiviati
-- predisposizione di una pagina personalizzata per gli eventi appartenenti a determinate categorie; si possonono indicare fino a quattro categorie (ID della categoria, titolo pagina, numero eventi per pagina, paginazione degli eventi)
+- predisposizione di una pagina personalizzata per gli eventi appartenenti a determinate categorie;
+si possonono indicare fino a quattro categorie (ID della categoria, titolo pagina, numero eventi per pagina, paginazione degli eventi)
 
 Opzioni del calendario:
 
@@ -49,14 +50,14 @@ Opzioni del calendario:
 - visualizzazione completa
 - posizione degli elementi nella visualizzazione completa (permutazioni tra lista eventi e calendario)
 
-**OUTPUTS**
+**OUTPUT**
 - calendario
 - lista eventi futuri o in via di svolgimento
 - lista eventi random
 - lista eventi selezionati (2)
-- lista eventi della settimana"), "role"=>'1'),
-- lista eventi archiviati"), "role"=>'1'),
-- ricerca eventi"), "role"=>'1'),
+- lista eventi della settimana
+- lista eventi archiviati
+- ricerca eventi
 - lista eventi per categoria (4)
 
 **INSTALLAZIONE**
