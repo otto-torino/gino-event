@@ -533,7 +533,8 @@ class event extends AbstractEvtClass {
 		$where = $item->dataSearch($this->_instanceName);
 		$options = $this->setValueOptions(array('where'=>$where));
 		
-		$GINO .= $item->formSearch($this->_instance, $this->_home."?evt[{$this->_instanceName}-searchItems]", array('section'=>true));
+		$url = $this->_plink->aLink($this->_instanceName, 'searchItems');
+		$GINO .= $item->formSearch($this->_instance, $url, array('section'=>true));
 		
 		$GINO .= "<div id=\"cal_list$this->_instance\">";
 		if($this->_view_without_search)
