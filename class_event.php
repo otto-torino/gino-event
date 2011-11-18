@@ -1504,7 +1504,7 @@ class event extends AbstractEvtClass {
 
 		$link_insert = "<a href=\"$this->_home?evt[$this->_instanceName-manageDoc]&amp;action=$this->_act_insert&amp;block=box\">".$this->icon('insert', _("nuovo box"))."</a>";
 
-		$htmlsection = new htmlSection(array('class'=>'admin', 'headerTag'=>'header', 'headerLabel'=>_("Gestione box home"), 'headerLinks'=>$link_insert));
+		$htmlsection = new htmlSection(array('class'=>'admin', 'headerTag'=>'header', 'headerLabel'=>_("Gestione box html"), 'headerLinks'=>$link_insert));
 
 		$items = eventBox::getAll($this->_instance);
 
