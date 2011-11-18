@@ -1285,7 +1285,7 @@ class event extends AbstractEvtClass {
 		$link_admin = "<a href=\"".$this->_home."?evt[$this->_instanceName-manageDoc]&block=permissions\">"._("Permessi")."</a>";
 		$link_css = "<a href=\"".$this->_home."?evt[$this->_instanceName-manageDoc]&block=css\">"._("CSS")."</a>";
 		$link_options = "<a href=\"".$this->_home."?evt[$this->_instanceName-manageDoc]&block=options\">"._("Opzioni")."</a>";
-		$link_box = "<a href=\"".$this->_home."?evt[$this->_instanceName-manageDoc]&block=box\">"._("Box Home")."</a>";
+		$link_box = "<a href=\"".$this->_home."?evt[$this->_instanceName-manageDoc]&block=box\">"._("Box Html")."</a>";
 		$link_newsletter = "<a href=\"".$this->_home."?evt[$this->_instanceName-manageDoc]&block=".$this->_block_newsl."\">"._("Newsletter")."</a>";
 		$link_listA = "<a href=\"".$this->_home."?evt[$this->_instanceName-manageDoc]&block=".$this->_block_sel_a."\">"._("Selezione A")."</a>";
 		$link_listB = "<a href=\"".$this->_home."?evt[$this->_instanceName-manageDoc]&block=".$this->_block_sel_b."\">"._("Selezione B")."</a>";
