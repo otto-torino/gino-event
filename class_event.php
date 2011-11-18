@@ -1020,7 +1020,7 @@ class event extends AbstractEvtClass {
 	
 		$this->accessType($this->_access_base);
 		
-		$htmlsection = new htmlSection(array('id'=>"cal_calendar_".$this->_instanceName,'class'=>'public', 'headerTag'=>'header', 'headerLabel'=>($this->_viewCal_title!='NULL'?$this->_viewCal_title:"")));
+		$htmlsection = new htmlSection(array('id'=>"cal_calendar",'class'=>'public', 'headerTag'=>'header', 'headerLabel'=>($this->_viewCal_title!='NULL'?$this->_viewCal_title:"")));
 
 		$GINO = $this->scriptAsset($this->_css_id."_".$this->_instanceName.".css", "calCSS$this->_instance", 'css');
 		$GINO .= $this->scriptAsset($this->_js_file, "calJs", 'js');
