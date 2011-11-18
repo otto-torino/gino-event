@@ -13,6 +13,31 @@ section#item_event {
 
 }
 
+/* Box Home Page */
+section#box_event {
+	background-color: #FFF;
+	padding: 2px;
+}
+section#box_event header {
+	font-size: 18px;
+	color: #000;
+	border: 0px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+section#box_event div.subtitle {
+	font-size: 12px;
+	margin-bottom: 4px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+section#box_event div.content {
+	
+}
+section#box_event_promotion div.attachment {
+	
+}
+
 /* Calendario */
 
 section#cal_calendar {

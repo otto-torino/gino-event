@@ -288,9 +288,11 @@ class eventItem extends propertyObject implements eventInt {
 	public function show($property=array()) {
 		
 		$manage_ctg = array_key_exists('manage_ctg', $property) ? $property['manage_ctg'] : false;
+		$folder = array_key_exists('folder', $property) ? $property['folder'] : '';
+		$prefix_img = array_key_exists('prefix_img', $property) ? $property['prefix_img'] : '';
 		
 		$buffer = '';
-		if($this->image) $buffer .= "<img class=\"card_img\" src=\"{$property['folder']}{$property['prefix_img']}$this->image\" />";
+		if($this->image) $buffer .= "<img class=\"card_img\" src=\"".$folder.$prefix_img.$this->image."\" />";
 		$buffer .= "<div class=\"card_mainInfo\">\n";
 		$buffer .= "<table>";
 		
@@ -343,7 +345,7 @@ class eventItem extends propertyObject implements eventInt {
 			if(isset($property['interface']) AND !empty($property['interface']))
 			{
 				$plink = new Link();
-				$link = $plink->aLink($property['interface'], 'downloader', "id={$this->id}&fld=attachment");
+				$link = $plink->aLink($property['interface'], 'downloader', "id={$this->id}");
 				$filename = "<a href=\"$link\">"._("scarica allegato")."</a>";
 			}
 			else $filename = htmlChars($this->attachment);
@@ -355,6 +357,8 @@ class eventItem extends propertyObject implements eventInt {
 	}
 	
 	public function formItem($formaction, $interface, $property=null) {
+
+		$manage_ctg = (isset($property['manage_ctg']) AND !empty($property['manage_ctg'])) ? $property['manage_ctg'] : false;
 
 		$gform = new Form('eform', 'post', true, array("trnsl_table"=>self::$_tbl_item, "trnsl_id"=>$this->id));
 		$gform->load('dataform');
@@ -374,7 +378,9 @@ class eventItem extends propertyObject implements eventInt {
 
 		$htmlsection = new htmlSection(array('class'=>'admin', 'headerTag'=>'h1', 'headerLabel'=>$title));
 
-		$required = 'ctg,name,date,duration,private';
+		$required = 'name,date,duration,private';
+		if($manage_ctg)
+			$required .= ',ctg';
 		$buffer = javascript::abiMapLib();
 		
 		$buffer .= "<script type=\"text/javascript\">";
@@ -394,9 +400,12 @@ class eventItem extends propertyObject implements eventInt {
 		$buffer .= $gform->hidden('old_image', $this->image);
 		$buffer .= $gform->hidden('old_attachment', $this->attachment);
 
-		$select_ctg = array();
-		foreach(eventCtg::getAll($interface->getInstance()) as $ctg) $select_ctg[$ctg->id] = htmlInput($ctg->name);
-		$buffer .= $gform->cselect('ctg', $gform->retvar('ctg', $this->_p['ctg']), $select_ctg,  _("Categoria"), array("required"=>true));
+		if($manage_ctg)
+		{
+			$select_ctg = array();
+			foreach(eventCtg::getAll($interface->getInstance()) as $ctg) $select_ctg[$ctg->id] = htmlInput($ctg->name);
+			$buffer .= $gform->cselect('ctg', $gform->retvar('ctg', $this->_p['ctg']), $select_ctg,  _("Categoria"), array("required"=>true));
+		}
 		$buffer .= $gform->cinput('name', 'text', $gform->retvar('name', htmlInput($this->_p['name'])), _("Titolo"), array("required"=>true, "size"=>40, "maxlength"=>200, "trnsl"=>true, "field"=>"name"));
 		$buffer .= $gform->cinput_date('date', $gform->retvar('date', dbDateToDate($this->_p['date'], "/")), _("Data"), array("required"=>true));
 		$buffer .= $gform->cinput('hours', 'text', $gform->retvar('hours', dbTimeToTime($this->_p['hours'])), _("Ora"), array("size"=>6, "maxlength"=>5, "field"=>"hours"));

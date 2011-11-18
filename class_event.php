@@ -4,6 +4,7 @@ require_once('class_eventCtg.php');
 require_once(CLASSES_DIR.OS.'class.selection.php');
 require_once(CLASSES_DIR.OS.'class.sort.php');
 require_once('class_eventItem.php');
+require_once('class_eventBox.php');
 
 class event extends AbstractEvtClass {
 
@@ -26,6 +27,7 @@ class event extends AbstractEvtClass {
 	private $_ctgViewerD_id, $_ctgViewerD_num, $_ctgViewerD_pag;
 
 	private $_event_dir, $_event_www, $_event_sub, $_js_file, $_css_id;
+	private $_manageBox;
 	private $_view_without_search;
 	private $_prefix_img, $_prefix_thumb, $_img_width, $_thumb_width;
 	private $_block_sel_a, $_block_sel_b, $_block_newsl;
@@ -53,6 +55,8 @@ class event extends AbstractEvtClass {
 		$this->_event_sub = array('img', 'doc');	// dir img -> field image, dir doc -> field attachment (pathDirectory())
 		$this->_js_file = 'event.js';
 		$this->_css_id = 'event';
+		
+		$this->_manageBox = true;
 		
 		// Options
 		
@@ -202,7 +206,7 @@ class event extends AbstractEvtClass {
 		return array("tables"=>array('event', 'event_ctg', 'event_opt', 'event_grp', 'event_usr', 'event_sel', 'event_sel_b'),
 			     "css"=>array('event.css'),
 			     "folderStructure"=>array(
-				     CONTENT_DIR.OS.'event'=>array()
+				     CONTENT_DIR.OS.'event'=>array('box'=>array())
 	     		)
 			);
 	}
@@ -237,12 +241,18 @@ class event extends AbstractEvtClass {
 		$result = $this->_db->actionquery($query);
 
 		/*
-		 * delete record and translation from table calendar_opt
+		 * delete record and translation from table event_opt
 		 */
 		$opt_id = $this->_db->getFieldFromId($this->_tbl_opt, "id", "instance", $this->_instance);
 		language::deleteTranslations($this->_tbl_opt, $opt_id);
 		
 		$query = "DELETE FROM ".$this->_tbl_opt." WHERE instance='$this->_instance'";	
+		$result = $this->_db->actionquery($query);
+		
+		/*
+		 * delete record from table event_box
+		 */
+		$query = "DELETE FROM ".eventBox::$_tbl_item." WHERE instance='$this->_instance'";	
 		$result = $this->_db->actionquery($query);
 		
 		/*
@@ -273,6 +283,7 @@ class event extends AbstractEvtClass {
 
 		$list = array(
 			"viewCal" => array("label"=>_("Calendario"), "role"=>'1'),
+			"boxHtml" => array("label"=>_("Box HTML"), "role"=>'1'),
 			"viewList" => array("label"=>_("Lista eventi futuri o in via di svolgimento"), "role"=>'1'),
 			"viewRandom" => array("label"=>_("Lista eventi random"), "role"=>'1'),
 			"viewSelected" => array("label"=>_("A - Lista eventi selezionati"), "role"=>'1'),
@@ -294,9 +305,12 @@ class event extends AbstractEvtClass {
 		return $this->_instance;
 	}
 
-	public function getEventWWW($id) {
+	public function getEventWWW($id, $property=null) {
 
-		return $this->pathDirectory($id, 'rel', 'image');
+		$file = (isset($property['file']) AND $property['file'] != '') ? $property['file'] : 'image';
+		$dir = (isset($property['dir']) AND $property['dir'] != '') ? $property['dir'] : null;
+		
+		return $this->pathDirectory($id, 'rel', $file, $dir);
 	}
 	
 	public function getPrefixImg() {
@@ -309,42 +323,74 @@ class event extends AbstractEvtClass {
 		return $this->_prefix_thumb;
 	}
 	
-	private function pathBaseDir($id, $type){
+	/**
+	 * Percorso della directory dei contenuti
+	 * 
+	 * @param integer $id
+	 * @param string $path		abs | rel
+	 * @param string $type		tipo di directory da ricostruire
+	 * 							type=box => directory del blocco home page
+	 * 							type=null => directory degli eventi
+	 * @return string
+	 */
+	private function pathBaseDir($id, $path, $type=null){
 		
-		if($type == 'abs')
-			$directory = $this->_event_dir.$this->_os.$id.$this->_os;
-		elseif($type == 'rel')
-			$directory = $this->_event_www.'/'.$id.'/';
-		else $directory = '';
-		
+		if($type)
+		{
+			if($type == 'box')
+				$add_dir = 'box';
+			else
+				$add_dir = '';
+			
+			if($path == 'abs')
+				$directory = $this->_event_dir.$this->_os.$add_dir.$this->_os.$id.$this->_os;
+			elseif($path == 'rel')
+				$directory = $this->_event_www.'/'.$add_dir.'/'.$id.'/';
+			else $directory = '';
+		}
+		else
+		{
+			if($path == 'abs')
+				$directory = $this->_event_dir.$this->_os.$id.$this->_os;
+			elseif($path == 'rel')
+				$directory = $this->_event_www.'/'.$id.'/';
+			else $directory = '';
+		}
 		return $directory;
 	}
 	
 	/**
-	 * Percorso delle directory
+	 * Percorso della directory dei contenuti tenendo conto delle sottodirectory
+	 * per immagini e allegati
 	 *
 	 * @param integer $id			record ID
-	 * @param string $type			abs | rel
+	 * @param string $path			abs | rel
 	 * @param string $field			field name
+	 * @param string $type			tipo di directory da ricostruire
+	 * 								type=box => directory del blocco home page
+	 * 								type=null => directory degli eventi
 	 * @return string
 	 */
-	private function pathDirectory($id, $type, $field=''){
+	private function pathDirectory($id, $path, $field='', $type=null){
 	
-		$directory = $this->pathBaseDir($id, $type);
+		$directory = $this->pathBaseDir($id, $path, $type);
 		
-		if($field == 'image') $sub = $this->_event_sub[0];
-		elseif ($field == 'attachment') $sub = $this->_event_sub[1];
-		else $sub = '';
-		
-		if($type == 'abs')
+		if(!$type)
 		{
-			if(!empty($sub)) $sub = $sub.$this->_os;
-			$directory = $directory.$sub;
-		}
-		elseif($type == 'rel')
-		{
-			if(!empty($sub)) $sub = $sub.'/';
-			$directory = $directory.$sub;
+			if($field == 'image') $sub = $this->_event_sub[0];
+			elseif ($field == 'attachment') $sub = $this->_event_sub[1];
+			else $sub = '';
+			
+			if($path == 'abs')
+			{
+				if(!empty($sub)) $sub = $sub.$this->_os;
+				$directory = $directory.$sub;
+			}
+			elseif($path == 'rel')
+			{
+				if(!empty($sub)) $sub = $sub.'/';
+				$directory = $directory.$sub;
+			}
 		}
 		
 		return $directory;
@@ -355,18 +401,32 @@ class event extends AbstractEvtClass {
 		$this->accessType($this->_access_base);
 		
 		$id = cleanVar($_GET, 'id', 'int', '');
-		$field = cleanVar($_GET, 'fld', 'string', '');
+		$field = cleanVar($_GET, 'f', 'string', '');
+		$opt = cleanVar($_GET, 'opt', 'string', '');
 		
-		if(!empty($id) AND !empty($field))
+		if($field == '') $field = 'attachment';
+		
+		if(!empty($id))
 		{
-			$query = "SELECT $field FROM ".eventItem::$_tbl_item." WHERE id='$id'";
+			if($opt == 'box')
+			{
+				$table = eventBox::$_tbl_item;
+				$type = 'box';
+			}
+			else
+			{
+				$table = eventItem::$_tbl_item;
+				$type = null;
+			}
+
+			$query = "SELECT $field FROM $table WHERE id='$id'";
 			$a = $this->_db->selectquery($query);
 			if(sizeof($a) > 0)
 			{
 				foreach($a AS $b)
 				{
 					$filename = $b[$field];
-					$full_path = $this->pathDirectory($id, 'abs', $field).$filename;
+					$full_path = $this->pathDirectory($id, 'abs', $field, $type).$filename;
 					download($full_path);
 					exit();
 				}
@@ -444,6 +504,30 @@ class event extends AbstractEvtClass {
 		return $postvar;
 	}
 	// Fine SEZIONE
+	
+	public function boxHtml(){
+	
+		$this->accessType($this->_access_base);
+		
+		$GINO = $this->scriptAsset($this->_css_id."_".$this->_instanceName.".css", "calCSS$this->_instance", 'css');
+		
+		$item = eventBox::getItem($this->_instance);
+		
+		if(is_object($item))
+		{
+			$title = htmlChars($item->ml('title'));
+			$htmlsection = new htmlSection(array('id'=>"box_".$this->_css_id."_".$this->_instanceName,'class'=>'public', 'headerTag'=>'header', 'headerLabel'=>$title));
+			
+			$GINO .= $item->show(array("interface"=>$this->_instanceName, "folder"=>$this->pathDirectory($item->id, 'rel', 'image'), "prefix_img"=>$this->_prefix_img, "prefix_thumb"=>$this->_prefix_thumb));
+		}
+		else
+		{
+			$htmlsection = new htmlSection();
+		}
+		$htmlsection->content = $GINO;
+
+		return $htmlsection->render();
+	}
 	
 	public function viewItem(){
 	
@@ -1201,6 +1285,7 @@ class event extends AbstractEvtClass {
 		$link_admin = "<a href=\"".$this->_home."?evt[$this->_instanceName-manageDoc]&block=permissions\">"._("Permessi")."</a>";
 		$link_css = "<a href=\"".$this->_home."?evt[$this->_instanceName-manageDoc]&block=css\">"._("CSS")."</a>";
 		$link_options = "<a href=\"".$this->_home."?evt[$this->_instanceName-manageDoc]&block=options\">"._("Opzioni")."</a>";
+		$link_box = "<a href=\"".$this->_home."?evt[$this->_instanceName-manageDoc]&block=box\">"._("Box Home")."</a>";
 		$link_newsletter = "<a href=\"".$this->_home."?evt[$this->_instanceName-manageDoc]&block=".$this->_block_newsl."\">"._("Newsletter")."</a>";
 		$link_listA = "<a href=\"".$this->_home."?evt[$this->_instanceName-manageDoc]&block=".$this->_block_sel_a."\">"._("Selezione A")."</a>";
 		$link_listB = "<a href=\"".$this->_home."?evt[$this->_instanceName-manageDoc]&block=".$this->_block_sel_b."\">"._("Selezione B")."</a>";
@@ -1217,6 +1302,10 @@ class event extends AbstractEvtClass {
 		elseif($this->_block == 'permissions' && $this->_access->AccessVerifyGroupIf($this->_className, $this->_instance, '', '')) {
 			$GINO = sysfunc::managePermissions($this->_instance, $this->_className);		
 			$sel_link = $link_admin;
+		}
+		elseif($this->_block == 'box') {
+			$GINO = $this->manageBox($this->_instance, $id);		
+			$sel_link = $link_box;
 		}
 		elseif($this->_block == 'options') {
 			$GINO = sysfunc::manageOptions($this->_instance, $this->_className);		
@@ -1271,6 +1360,7 @@ class event extends AbstractEvtClass {
 				$links_array[] = $link_listA;
 			}
 			
+			if($this->_manageBox) $links_array[] = $link_box;
 			$links_array[] = $link_dft;
 		}
 		else
@@ -1284,6 +1374,7 @@ class event extends AbstractEvtClass {
 				$links_array[] = $link_listA;
 			}
 			
+			if($this->_manageBox) $links_array[] = $link_box;
 			$links_array[] = $link_dft;
 		}
 
@@ -1291,6 +1382,26 @@ class event extends AbstractEvtClass {
 		$htmltab->selectedLink = $sel_link;
 		$htmltab->htmlContent = $GINO;
 		return $htmltab->render();
+	}
+	
+	private function manageBox($instance, $id) {
+
+		if($this->_action == $this->_act_insert || $this->_action == $this->_act_modify)
+			$form = $this->formBox(new eventBox($id)); 
+		elseif($this->_action == $this->_act_delete)
+			$form = $this->formDelBox(new eventBox($id));
+		else $form = $this->info();
+
+			$GINO = "<div class=\"vertical_1\">\n";
+			$GINO .= $this->listBox();
+			$GINO .= "</div>\n";
+
+			$GINO .= "<div class=\"vertical_2\">\n";
+			$GINO .= $form;
+			$GINO .= "</div>\n";
+			$GINO .= "<div class=\"null\"></div>\n";
+		
+		return $GINO;
 	}
 
 	private function formCtg($ctg) {
@@ -1317,7 +1428,7 @@ class event extends AbstractEvtClass {
 		$start = cleanVar($_GET, 'start', 'int', '');
 		
 		$GINO = "<div class=\"area\">\n";
-		$GINO .=  $event->formItem($this->_home."?evt[$this->_instanceName-actionEvent]", $this, array('max_char'=>$this->_char_summary, 'start'=>$start));
+		$GINO .=  $event->formItem($this->_home."?evt[$this->_instanceName-actionEvent]", $this, array('manage_ctg'=>$this->_manageCtg, 'max_char'=>$this->_char_summary, 'start'=>$start));
 		$GINO .= "</div>\n";
 
 		return $GINO;
@@ -1327,6 +1438,26 @@ class event extends AbstractEvtClass {
 
 		$GINO = "<div class=\"area\">";
 		$GINO .= $event->formDelItem($this->_home."?evt[$this->_instanceName-actionDelEvent]");
+		$GINO .= "</div>";
+
+		return $GINO;
+	}
+	
+	private function formBox(eventInt $obj) {
+
+		$start = cleanVar($_GET, 'start', 'int', '');
+		
+		$GINO = "<div class=\"area\">\n";
+		$GINO .=  $obj->formItem($this->_home."?evt[$this->_instanceName-actionBox]", $this, array('start'=>$start));
+		$GINO .= "</div>\n";
+
+		return $GINO;
+	}
+	
+	private function formDelBox(eventInt $obj) {
+
+		$GINO = "<div class=\"area\">";
+		$GINO .= $obj->formDelItem($this->_home."?evt[$this->_instanceName-actionDelBox]");
 		$GINO .= "</div>";
 
 		return $GINO;
@@ -1353,6 +1484,40 @@ class event extends AbstractEvtClass {
 			$GINO .= "<div class=\"right\">";
 			$link_modify = "<span class=\"link\" onclick=\"if(!$('formctg').value) alert('"._("Selezionare la categoria da modificare")."');else location.href='".$this->_home."?evt[".$this->_instanceName."-manageDoc]&block=ctg&action=".$this->_act_modify."&ctg='+$('formctg').value\">".$this->icon('modify')."</span>";
 			$link_delete = "<span class=\"link\" onclick=\"if(!$('formctg').value) alert('"._("Selezionare la categoria da eliminare")."');else location.href='".$this->_home."?evt[".$this->_instanceName."-manageDoc]&block=ctg&action=".$this->_act_delete."&ctg='+$('formctg').value\">".$this->icon('delete')."</span>";
+			$GINO .= $link_modify." ".$link_delete;
+			$GINO .= "</div>";
+			$GINO .= "<div class=\"null\"></div>";
+			$GINO .= "</div>";
+		}
+		else 
+			$GINO = "<p>"._("Non risultano categorie registrate")."</p>\n";
+
+		$htmlsection->content = $GINO;
+
+		return $htmlsection->render();
+	}
+	
+	private function listBox() {
+		
+		$gform = new Form('gformc', 'post', true);
+		$sel_item = cleanVar($_GET, 'id', 'int', '');
+
+		$link_insert = "<a href=\"$this->_home?evt[$this->_instanceName-manageDoc]&amp;action=$this->_act_insert&amp;block=box\">".$this->icon('insert', _("nuovo box"))."</a>";
+
+		$htmlsection = new htmlSection(array('class'=>'admin', 'headerTag'=>'header', 'headerLabel'=>_("Gestione box home"), 'headerLinks'=>$link_insert));
+
+		$items = eventBox::getAll($this->_instance);
+
+		if(count($items)>0) {
+			$select_item = array();
+			foreach($items as $ctg) $select_item[$ctg->id] = htmlChars($ctg->ml('name'))." - id:".$ctg->id;
+			$GINO = "<div>";
+			$GINO .= "<div class=\"left\">";
+			$GINO .= $gform->select('formbox', $sel_item, $select_item, array("id"=>"formbox", 'maxChars'=>40, 'cutWords'=>false));
+			$GINO .= "</div>";
+			$GINO .= "<div class=\"right\">";
+			$link_modify = "<span class=\"link\" onclick=\"if(!$('formbox').value) alert('"._("Selezionare il box da modificare")."');else location.href='".$this->_home."?evt[".$this->_instanceName."-manageDoc]&block=box&action=".$this->_act_modify."&id='+$('formbox').value\">".$this->icon('modify')."</span>";
+			$link_delete = "<span class=\"link\" onclick=\"if(!$('formbox').value) alert('"._("Selezionare il box da eliminare")."');else location.href='".$this->_home."?evt[".$this->_instanceName."-manageDoc]&block=box&action=".$this->_act_delete."&id='+$('formbox').value\">".$this->icon('delete')."</span>";
 			$GINO .= $link_modify." ".$link_delete;
 			$GINO .= "</div>";
 			$GINO .= "<div class=\"null\"></div>";
@@ -1648,6 +1813,66 @@ class event extends AbstractEvtClass {
 			$this->deleteFileDir($dir);
 
 		EvtHandler::HttpCall($this->_home, $this->_instanceName.'-manageDoc', '');
+	}
+	
+	public function actionBox() {
+	
+		$this->accessGroup('');
+
+		$gform = new Form('bform', 'post', false);
+		$gform->save('bdataform');
+		$req_error = $gform->arequired();
+
+		$id = cleanVar($_POST, 'id', 'int', '');
+		$start = cleanVar($_POST, 'start', 'int', '');
+
+		$link_error = $this->_home."?evt[$this->_instanceName-manageDoc]&block=box&action={$this->_action}&start=$start";
+		if($id) $link_error .= "&id=$id";
+
+		if($req_error > 0) 
+			exit(error::errorMessage(array('error'=>1), $link_error));
+
+		$obj = new eventBox($id);
+		$obj->instance = $this->_instance;
+		$obj->date = date("Y-m-d H:i:s");
+
+		foreach($_POST as $k=>$v) {
+			$obj->{$k} = $k;
+		}
+		
+		$old_img = cleanVar($_POST, 'old_image', 'string', '');
+		$old_attach = cleanVar($_POST, 'old_attachment', 'string', '');
+		
+		if($obj->updateDbData())
+			$directory = $this->pathDirectory($obj->id, 'abs', '', 'box');
+		
+		$gform->manageFile('image', $old_img, true, eventBox::$extension_media, $directory, $link_error, eventBox::$_tbl_item, 'image', 'id', $obj->id, 
+			array('prefix_file'=>$this->_prefix_img, 'prefix_thumb'=>$this->_prefix_thumb, 'width'=>$this->_img_width, 'thumb_width'=>$this->_thumb_width));
+		
+		$gform->manageFile('attachment', $old_attach, false, eventBox::$extension_attach, $directory, $link_error, eventBox::$_tbl_item, 'attachment', 'id', $obj->id);
+		
+		EvtHandler::HttpCall($this->_home, $this->_instanceName.'-manageDoc', "block=box&start=$start");
+	}
+
+	public function actionDelBox() {
+	
+		$this->accessGroup('');
+		$gform = new Form('dform', 'post', false);
+		$gform->save('ddataform');
+		$req_error = $gform->arequired();
+
+		$id = cleanVar($_POST, 'id', 'int', '');
+		
+		if($req_error > 0) 
+			exit(error::errorMessage(array('error'=>9), $this->_home."?evt[$this->_instanceName-manageDoc]"));
+
+		$dir = $this->pathBaseDir($id, 'abs', 'box');
+		
+		$item = new eventBox($id);
+		if($item->deleteDbData())
+			$this->deleteFileDir($dir);
+
+		EvtHandler::HttpCall($this->_home, $this->_instanceName.'-manageDoc', 'block=box');
 	}
 	
 	/*

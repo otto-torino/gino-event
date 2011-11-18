@@ -1,3 +1,11 @@
+-- phpMyAdmin SQL Dump
+-- version 3.3.8
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generato il: 18 nov, 2011 at 12:04 AM
+-- Versione MySQL: 5.1.48
+-- Versione PHP: 5.3.6
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -30,6 +38,27 @@ CREATE TABLE IF NOT EXISTS `event` (
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `event_box`
+--
+
+CREATE TABLE IF NOT EXISTS `event_box` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `instance` varchar(200) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `subtitle` varchar(200) NOT NULL,
+  `content` text NOT NULL,
+  `text_attachment` varchar(200) NOT NULL,
+  `image` varchar(200) NOT NULL,
+  `attachment` varchar(200) NOT NULL,
+  `active` enum('yes','no') NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `event_ctg`
 --
 
@@ -40,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `event_ctg` (
   `description` text NOT NULL,
   `link` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
