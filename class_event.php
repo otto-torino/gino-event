@@ -1020,7 +1020,7 @@ class event extends AbstractEvtClass {
 	
 		$this->accessType($this->_access_base);
 		
-		$htmlsection = new htmlSection(array('id'=>"cal_calendar",'class'=>'public', 'headerTag'=>'header', 'headerLabel'=>($this->_viewCal_title!='NULL'?$this->_viewCal_title:"")));
+		$htmlsection = new htmlSection(array('id'=>"cal_event_".$this->_instanceName,'class'=>'public', 'headerTag'=>'header', 'headerLabel'=>($this->_viewCal_title!='NULL'?$this->_viewCal_title:"")));
 
 		$GINO = $this->scriptAsset($this->_css_id."_".$this->_instanceName.".css", "calCSS$this->_instance", 'css');
 		$GINO .= $this->scriptAsset($this->_js_file, "calJs", 'js');
@@ -1140,10 +1140,10 @@ class event extends AbstractEvtClass {
 
 		$GINO .= "<div>";
 		$GINO .= "<table class=\"calendarTop\"><tr>\n";
-		$onclick = "ajaxRequest('post', '$this->_home?pt[$this->_instanceName-renderRight]', 'vdate=".$prev_date."', $$('#cal_calendar_".$this->_instanceName." td[class=calendarRight]')[0], {'script':true, 'cache':true})";
+		$onclick = "ajaxRequest('post', '$this->_home?pt[$this->_instanceName-renderRight]', 'vdate=".$prev_date."', $$('#cal_event_".$this->_instanceName." td[class=calendarRight]')[0], {'script':true, 'cache':true})";
 		$GINO .= "<td class=\"previousMonth\" onclick=\"$onclick\"></td>\n";
 		$GINO .= "<td>".$this->_months[$vdate['mon']]." ".$vdate['year']."</td>\n";
-		$onclick = "ajaxRequest('post', '$this->_home?pt[$this->_instanceName-renderRight]', 'vdate=".$next_date."', $$('#cal_calendar_".$this->_instanceName." td[class=calendarRight]')[0], {'script':true, 'cache':true})";
+		$onclick = "ajaxRequest('post', '$this->_home?pt[$this->_instanceName-renderRight]', 'vdate=".$next_date."', $$('#cal_event_".$this->_instanceName." td[class=calendarRight]')[0], {'script':true, 'cache':true})";
 		$GINO .= "<td class=\"nextMonth\" onclick=\"$onclick\"></td>\n";
 		$GINO .= "</tr></table>";
 		$GINO .= "</div>";
@@ -1225,7 +1225,7 @@ class event extends AbstractEvtClass {
 		if($iter==date('j') && $vdate['mon']==date('n') && $vdate['year']==date('Y'))  $type[] = 'today'; // data odierna
 		$day = ($iter<10)?"0".$iter:$iter;
 		$month = ($vdate['mon']<10)?"0".$vdate['mon']:$vdate['mon'];
-		if(eventItem::getDateItems($this->_instance, $vdate['year']."-$month-$day", null, $private, true)) $type[] = 'event'; // eventi presenti
+		if(eventItem::getDateItems($this->_instance, $vdate['year']."-$month-$day", null, $private, true)) $type[] = 'item'; // eventi presenti
 		if($iter==$date['mday'] && $date['mon']==$vdate['mon'] & $date['year']==$vdate['year'])	$type[] = 'sel'; // data selezionata
 		$class = "day";
 		foreach($type as $t) $class .= "_$t";

@@ -40,60 +40,60 @@ section#box_event div.attachment {
 
 /* Calendario */
 
-section#cal_calendar {
+section#cal_event {
 
 }
-section#cal_calendar div.calContainer {
+section#cal_event div.calContainer {
 }
-section#cal_calendar div.calContainer a:link, section#cal_calendar div.calContainer a:visited, section#cal_calendar div.calContainer span.link {
+section#cal_event div.calContainer a:link, section#cal_event div.calContainer a:visited, section#cal_event div.calContainer span.link {
 	color:#000;
 }
-section#cal_calendar table.calendarContainer {
+section#cal_event table.calendarContainer {
 	border-collapse:separate;
 	background-color:#333300;
 }
 
-section#cal_calendar td.calendarLeft {
+section#cal_event td.calendarLeft {
 	background-color:#cccc99;
 	border:1px solid #fff;
 	width:140px;
 }
 
-section#cal_calendar td.calendarRight {
+section#cal_event td.calendarRight {
 	border:1px solid #fff;
 	width:218px;
 }
-section#cal_calendar div.calendarActualDay {
+section#cal_event div.calendarActualDay {
 	background-color:#333300;
 	margin:-2px;
 }
-section#cal_calendar div.calendarActualDay table {
+section#cal_event div.calendarActualDay table {
 	margin:auto;
 }
-section#cal_calendar td.dayLetter {
+section#cal_event td.dayLetter {
 	vertical-align:middle;
 	color:#fff;
 	font-weight:bold;
 	font-size:14px;
 }
-section#cal_calendar td.dayNumber {
+section#cal_event td.dayNumber {
 	color:#ffff00;
 	font-size:26px;
 	font-weight:bold;
 }
-section#cal_calendar div.eventItems {
+section#cal_event div.eventItems {
 	margin:2px -2px 0px -2px;
 }
-section#cal_calendar div.eventItems div.eventItemsTitle {
+section#cal_event div.eventItems div.eventItemsTitle {
 	background-color:#666600;
 	color:#fff;
 	text-align:center;
 }
-section#cal_calendar div.eventItemsFieldWide {
+section#cal_event div.eventItemsFieldWide {
 	max-height:110px;
 	overflow:auto;
 }
-section#cal_calendar div.eventItemsFieldWide ul {
+section#cal_event div.eventItemsFieldWide ul {
 	list-style-image:url('img/lista_mini.gif');
 	text-indent:0px;
 	list-style-position:inline;
@@ -102,82 +102,82 @@ section#cal_calendar div.eventItemsFieldWide ul {
 #	list-style-image: url('img/lista_mini_ie.gif');
 }
 
-section#cal_calendar table.calendarTop {
+section#cal_event table.calendarTop {
 	color:#ffff00;
 	text-align:center;
 	margin:auto;
 }
-section#cal_calendar table.calendarTop td.previousMonth {
+section#cal_event table.calendarTop td.previousMonth {
 	cursor:pointer;
 	width:10px;
 	background:url('img/freccinaSX.png');
 	background-repeat:no-repeat;
 	background-position:center center;
 }
-section#cal_calendar table.calendarTop td.nextMonth {
+section#cal_event table.calendarTop td.nextMonth {
 	cursor:pointer;
 	width:8px;
 	background:url('img/freccinaDX.png');
 	background-repeat:no-repeat;
 	background-position:center center;
 }
-section#cal_calendar table.calendarBody {
+section#cal_event table.calendarBody {
 	color:#fff;
 	margin:auto;
 	font-weight:bold;
 }
-section#cal_calendar table.calendarBody td {
+section#cal_event table.calendarBody td {
 	border-left: 1px solid #fff;
 	text-align:right;
 	padding:4px;
 }
-section#cal_calendar table.calendarBody .day {
+section#cal_event table.calendarBody .day {
 	cursor:pointer;
 }
 
-section#cal_calendar table.calendarBody .day_sel {
+section#cal_event table.calendarBody .day_sel {
 	color: #333300;
 	background-color:#fff;
 	padding:0px 0px;
 }
-section#cal_calendar table.calendarBody .day_event {
+section#cal_event table.calendarBody .day_item {
 	cursor:pointer;
 	color: #ffff00;
 	padding:0px 0px;
 }
-section#cal_calendar table.calendarBody .day_event_sel {
+section#cal_event table.calendarBody .day_item_sel {
 	cursor:pointer;
 	color: #333300;
 	background-color:#fff;
 	padding:0px 0px;
 }
-section#cal_calendar table.calendarBody .day_today {
+section#cal_event table.calendarBody .day_today {
 	cursor:pointer;
 	color: #fff;
 	padding:0px 0px;
 	border-bottom:2px solid #fff;
 }
-section#cal_calendar table.calendarBody .day_today_event {
+section#cal_event table.calendarBody .day_today_item {
 	cursor:pointer;
 	color: #ffff00;
 	padding:0px 0px;
 	border-bottom:2px solid #fff;
 }
 
-section#cal_calendar table.calendarBody .day_today_sel {
+section#cal_event table.calendarBody .day_today_sel {
 	color: #333300;
 	background-color:#fff;
 	border-bottom:2px solid #fff;
 	padding:0px 0px;
 }
-section#cal_calendar table.calendarBody .day_today_event_sel {
+section#cal_event table.calendarBody .day_today_item_sel {
 	color: #333300;
 	background-color:#fff;
 	border-bottom:2px solid #fff;
 	padding:0px 0px;
 }
 
-section#cal_calendar div.calendarEventsLayer {
+section#cal_event div.calendarEventsLayer {
 	text-align:left;
 	position:absolute;
 	top:0;
@@ -189,7 +189,7 @@ section#cal_calendar div.calendarEventsLayer {
 	height:160px;
 	display:hidden;
 }
-section#cal_calendar div.calendarEventsField {
+section#cal_event div.calendarEventsField {
 	color:#000;
 	background-color:#cccc99;
 	height: 142px;
@@ -197,13 +197,13 @@ section#cal_calendar div.calendarEventsField {
 	font-weight:normal;
 	overflow:auto;
 }
-section#cal_calendar div.calendarEventsField a:link, section#cal_calendar div.calendarEventsField a:visited {
+section#cal_event div.calendarEventsField a:link, section#cal_event div.calendarEventsField a:visited {
 	text-decoration:none;
 }
-section#cal_calendar div.calendarEventsField a:hover {
+section#cal_event div.calendarEventsField a:hover {
 	text-decoration: underline;
 } 
-section#cal_calendar div.calendarEventsField ul {
+section#cal_event div.calendarEventsField ul {
 	color:#000;
 	list-style-image:url('img/lista_mini.gif');
 	text-indent:0px;
@@ -213,7 +213,7 @@ section#cal_calendar div.calendarEventsField ul {
 #	list-style-image: url('img/lista_mini_ie.gif');
 }
 
-section#cal_calendar div#calendarLayerClose {
+section#cal_event div#calendarLayerClose {
 	float:right;
 	margin-top:3px;
 	margin-right:3px;
