@@ -210,7 +210,7 @@ class eventItem extends propertyObject implements eventInt {
 		}
 		$search_loc = $gform->input('location', 'text', htmlInput($this->sessionVar($interface, 'location')), array("size"=>$size, "maxlength"=>200));
 		$search_submit = $gform->input('submit_action', 'submit', _("cerca"), array("classField"=>"submit"));
-		$search_zero = "<input type=\"button\" class=\"generic\" value=\""._("azzera")."\" onclick=\"$$('input[type=text]').set('value', '');$$('select').set('value', '');$$('input[type=radio]').set('checked', '');\"/>";
+		$search_zero = "<input type=\"button\" class=\"generic\" value=\""._("cancella")."\" onclick=\"$$('input[type=text]').set('value', '');$$('select').set('value', '');$$('input[type=radio]').set('checked', '');$('sform').submit();\"/>";
 		// End
 		
 		$buffer .= "<table style=\"margin-top:0px; width:100%;\">";
