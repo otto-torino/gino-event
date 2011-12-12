@@ -1525,7 +1525,7 @@ class event extends AbstractEvtClass {
 				if($item->active == 'yes')
 				{
 					$active = _("attivo");
-					$active_class = 'active';
+					$active_class = $selected ? '' : 'active';
 				}
 				else
 				{
