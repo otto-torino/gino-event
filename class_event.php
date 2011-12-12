@@ -1392,14 +1392,14 @@ class event extends AbstractEvtClass {
 			$form = $this->formDelBox(new eventBox($id));
 		else $form = $this->info();
 
-			$GINO = "<div class=\"vertical_1\">\n";
-			$GINO .= $this->listBox();
-			$GINO .= "</div>\n";
+		$GINO = "<div class=\"vertical_1\">\n";
+		$GINO .= $this->listBox();
+		$GINO .= "</div>\n";
 
-			$GINO .= "<div class=\"vertical_2\">\n";
-			$GINO .= $form;
-			$GINO .= "</div>\n";
-			$GINO .= "<div class=\"null\"></div>\n";
+		$GINO .= "<div class=\"vertical_2\">\n";
+		$GINO .= $form;
+		$GINO .= "</div>\n";
+		$GINO .= "<div class=\"null\"></div>\n";
 		
 		return $GINO;
 	}
@@ -1500,31 +1500,46 @@ class event extends AbstractEvtClass {
 	private function listBox() {
 		
 		$gform = new Form('gformc', 'post', true);
-		$sel_item = cleanVar($_GET, 'id', 'int', '');
+		$sel_id = cleanVar($_GET, 'id', 'int', '');
 
 		$link_insert = "<a href=\"$this->_home?evt[$this->_instanceName-manageDoc]&amp;action=$this->_act_insert&amp;block=box\">".$this->icon('insert', _("nuovo box"))."</a>";
 
 		$htmlsection = new htmlSection(array('class'=>'admin', 'headerTag'=>'header', 'headerLabel'=>_("Gestione box html"), 'headerLinks'=>$link_insert));
 
+		$GINO = '';
 		$items = eventBox::getAll($this->_instance);
 
-		if(count($items)>0) {
-			$select_item = array();
-			foreach($items as $ctg) $select_item[$ctg->id] = htmlChars($ctg->ml('name'))." - id:".$ctg->id;
-			$GINO = "<div>";
-			$GINO .= "<div class=\"left\">";
-			$GINO .= $gform->select('formbox', $sel_item, $select_item, array("id"=>"formbox", 'maxChars'=>40, 'cutWords'=>false));
-			$GINO .= "</div>";
-			$GINO .= "<div class=\"right\">";
-			$link_modify = "<span class=\"link\" onclick=\"if(!$('formbox').value) alert('"._("Selezionare il box da modificare")."');else location.href='".$this->_home."?evt[".$this->_instanceName."-manageDoc]&block=box&action=".$this->_act_modify."&id='+$('formbox').value\">".$this->icon('modify')."</span>";
-			$link_delete = "<span class=\"link\" onclick=\"if(!$('formbox').value) alert('"._("Selezionare il box da eliminare")."');else location.href='".$this->_home."?evt[".$this->_instanceName."-manageDoc]&block=box&action=".$this->_act_delete."&id='+$('formbox').value\">".$this->icon('delete')."</span>";
-			$GINO .= $link_modify." ".$link_delete;
-			$GINO .= "</div>";
-			$GINO .= "<div class=\"null\"></div>";
-			$GINO .= "</div>";
+		if(count($items)>0)
+		{	
+			$htmlList = new htmlList(array("numItems"=>count($items), "separator"=>true));
+			$GINO .= $htmlList->start();
+			
+			foreach($items as $item) {
+		
+				$selected = $item->id == $sel_id ? true : false;
+
+				$link_modify = "<a href=\"$this->_home?evt[$this->_instanceName-manageDoc]&amp;id={$item->id}&amp;block=box&amp;action=$this->_act_modify\">".$this->icon('modify')."</a>";
+				$link_delete = "<a href=\"$this->_home?evt[$this->_instanceName-manageDoc]&amp;id={$item->id}&amp;block=box&amp;action=$this->_act_delete\">".$this->icon('delete')."</a>";
+				
+				$name = dbDatetimeToDate($item->date, "/").' - '.htmlChars($item->ml('name'));
+				if($item->active == 'yes')
+				{
+					$active = _("attivo");
+					$active_class = 'evidence';
+				}
+				else
+				{
+					$active = _("non attivo");
+					$active_class = '';
+				}
+				$content = htmlChars($item->ml('title'))." - $active";
+				
+				$GINO .= $htmlList->item($name, array($link_modify, $link_delete), $selected, true, $content, '', $active_class);
+			}
+			$GINO .= $htmlList->end();
 		}
 		else 
-			$GINO = "<p>"._("Non risultano categorie registrate")."</p>\n";
+			$GINO = "<p>"._("Non risultano elementi salvati")."</p>\n";
 
 		$htmlsection->content = $GINO;
 
