@@ -113,21 +113,57 @@ class eventItem extends propertyObject implements eventInt {
 	/*
 	 * Per le ricerche 
 	 */
+	
+	/**
+	 * Ritorna il valore di una chiave di ricerca (variabile di sessione)
+	 * 
+	 * @param string $interface		instance name
+	 * @param string $name			input name
+	 * @return null
+	 */
 	private function sessionVar($interface, $name) {
 
 		return isset($_SESSION[$interface][$name]) ? $_SESSION[$interface][$name] : null;
 	}
 	
+	/**
+	 * Resetta e imposta le chiavi di ricerca in variabili di sessione
+	 * 
+	 * @param string $interface		instance name
+	 * @return null
+	 */
 	private function actionSearch($interface) {
 
-		$_SESSION[$interface]['name'] = cleanVar($_POST, 'name', 'string', '');
-		$_SESSION[$interface]['ctg'] = cleanVar($_POST, 'ctg', 'int', '');
-		$_SESSION[$interface]['location'] = cleanVar($_POST, 'location', 'string', '');
-		$_SESSION[$interface]['sfromdate'] = cleanVar($_POST, 'sfromdate', 'string', '');
-		$_SESSION[$interface]['stodate'] = cleanVar($_POST, 'stodate', 'string', '');
-		$_SESSION[$interface]['range'] = cleanVar($_POST, 'range', 'string', '');
+		// Reset
+		if(isset($_POST['submit_reset']) && $_POST['submit_reset'] != '')
+		{
+			unset($_SESSION[$interface]);
+		}
+		else	// Set Session
+		{
+			if(isset($_POST['name']) && $_POST['name'] != '')
+				$_SESSION[$interface]['name'] = cleanVar($_POST, 'name', 'string', '');
+			
+			if(isset($_POST['ctg']) && $_POST['ctg'] != 0)
+				$_SESSION[$interface]['ctg'] = cleanVar($_POST, 'ctg', 'int', '');
+			
+			if(isset($_POST['location']) && $_POST['location'] != '')
+				$_SESSION[$interface]['location'] = cleanVar($_POST, 'location', 'string', '');
+			
+			if(isset($_POST['sfromdate']) && $_POST['sfromdate'] != '')
+				$_SESSION[$interface]['sfromdate'] = cleanVar($_POST, 'sfromdate', 'string', '');
+			
+			if(isset($_POST['stodate']) && $_POST['stodate'] != '')
+				$_SESSION[$interface]['stodate'] = cleanVar($_POST, 'stodate', 'string', '');
+		}
 	}
 
+	/**
+	 * Costruisce la condizione della query di ricerca
+	 * 
+	 * @param string $interface		instance name
+	 * @return string
+	 */
 	private function setWhere($interface) {
 
 		$where = array();
@@ -152,10 +188,16 @@ class eventItem extends propertyObject implements eventInt {
 			$where[] = "date<='".dateToDbDate($this->sessionVar($interface, 'stodate'), "/")."'";
 		}
 		
-		return implode(" AND ", $where);
+		$where = implode(" AND ", $where);
+		$_SESSION[$interface]['where'] = $where;
+		
+		return $where;
 	}
 	
-	// $interface: instance name
+	/**
+	 * @param string $interface		instance name
+	 * @return string
+	 */
 	public function dataSearch($interface){
 		
 		$this->actionSearch($interface);
@@ -163,12 +205,15 @@ class eventItem extends propertyObject implements eventInt {
 		return $where;
 	}
 	
-	/*
-	 * Opzioni:
-	 * ----------------
-	 * ctg			boolean		segnala se le categorie sono abilitate
-	 * admin		boolean		nella parte amministrativa
-	 * section		boolean		trattato come sezione
+	/**
+	 * Form di ricerca
+	 * 
+	 * @param integer $instance	instance ID
+	 * @param string $url		indirizzo della action
+	 * @param array $options
+	 * 		boolean	ctg			segnala se le categorie sono abilitate
+	 * 		boolean	admin		nella parte amministrativa
+	 * 		boolean	section		trattato come sezione
 	 */
 	public function formSearch($instance, $url, $options=array()){
 		
@@ -210,7 +255,8 @@ class eventItem extends propertyObject implements eventInt {
 		}
 		$search_loc = $gform->input('location', 'text', htmlInput($this->sessionVar($interface, 'location')), array("size"=>$size, "maxlength"=>200));
 		$search_submit = $gform->input('submit_action', 'submit', _("cerca"), array("classField"=>"submit"));
-		$search_zero = "<input type=\"button\" class=\"generic\" value=\""._("cancella")."\" onclick=\"$$('input[type=text]').set('value', '');$$('select').set('value', '');$$('input[type=radio]').set('checked', '');$('sform').submit();\"/>";
+		$search_zero = $gform->input('submit_reset', 'submit', _("cancella"), array("classField"=>"submit"));
+		//$search_zero = "<input type=\"button\" class=\"generic\" value=\""._("cancella")."\" onclick=\"$$('input[type=text]').set('value', '');$$('select').set('value', '');$$('input[type=radio]').set('checked', '');$('sform').submit();\"/>";
 		// End
 		
 		$buffer .= "<table style=\"margin-top:0px; width:100%;\">";
@@ -277,13 +323,12 @@ class eventItem extends propertyObject implements eventInt {
 	 * Visualizzazione
 	 *
 	 * @param array $property
+	 * 		string		interface		nome dell'istanza, se presente attiva il download del file allegato
+	 * 		string		folder			percorso della directory del file immagine
+	 * 		string		prefix_img
+	 * 		string		prefix_thumb
+	 * 		boolean		manage_ctg		indica se le categorie sono attivate
 	 * @return string
-	 * 
-	 * interface		nome dell'istanza, se presente attiva il download del file allegato
-	 * folder			percorso della directory del file immagine
-	 * prefix_img
-	 * prefix_thumb
-	 * manage_ctg		indica se le categorie sono attivate
 	 */
 	public function show($property=array()) {
 		

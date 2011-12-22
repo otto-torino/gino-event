@@ -1546,7 +1546,7 @@ class event extends AbstractEvtClass {
 		return $htmlsection->render();
 	}
 
-	private function listItems($form=false) {
+	private function listItems() {
 		
 		$link_insert = "<a href=\"$this->_home?evt[$this->_instanceName-manageDoc]&amp;action=$this->_act_insert\">".$this->icon('insert', _("nuovo evento"))."</a>";
 
@@ -1554,15 +1554,8 @@ class event extends AbstractEvtClass {
 		
 		$GINO = $this->scriptAsset($this->_css_id."_".$this->_instanceName.".css", "calCSS$this->_instance", 'css');
 		
-		$item = new eventItem(null);
-		$where = $item->dataSearch($this->_instanceName);
-		$options = $this->setValueOptions(array('where'=>$where));
-		$options['form'] = $form;
-		
-		$GINO .= $item->formSearch($this->_instance, $this->_home."?evt[{$this->_instanceName}-manageDoc]", array('admin'=>true, 'ctg'=>$this->_manageCtg));
-		
 		$GINO .= "<div id=\"cal_list$this->_instance\">";
-		$GINO .= $this->ajaxAdminItems($options);
+		$GINO .= $this->ajaxAdminItems();
 		$GINO .= "</div>";
 		
 		$htmlsection->content = $GINO;
@@ -1574,9 +1567,12 @@ class event extends AbstractEvtClass {
 
 		$GINO = '';
 		
-		// Opzioni
-		if(empty($options)) $options = $this->setValueOptions();
+		$item = new eventItem(null);
+		$where = $item->dataSearch($this->_instanceName);
+		$GINO .= $item->formSearch($this->_instance, $this->_home."?evt[{$this->_instanceName}-manageDoc]", array('admin'=>true, 'ctg'=>$this->_manageCtg));
 		
+		// Opzioni
+		if(empty($options)) $options = $this->setValueOptions(array('where'=>$where));
 		$form = array_key_exists('form', $options) ? $options['form'] : false;
 		// End
 		
