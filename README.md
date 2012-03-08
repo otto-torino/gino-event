@@ -1,7 +1,7 @@
 event library for gino CMS by Otto Srl, MIT license
 ===================================================================
-Libreria per la gestione di eventi.
-Tra le caratteristiche: categorie, calendario, selezione (2), ordinamento, aggancio alla newsletter, una interfaccia per esporre qualcosa di particolare sul layout (box html).
+Libreria per la gestione di eventi.   
+Tra le caratteristiche: categorie, calendario, selezione (2), ordinamento, aggancio alla newsletter, una interfaccia per esporre qualcosa di particolare sul layout (box html).   
 La documentazione dell'ultima versione disponibile la si trova qui:    
 http://otto-torino.github.com/gino-event
 
@@ -46,6 +46,7 @@ OPZIONI CONFIGURABILI
 si possonono indicare fino a quattro categorie (ID della categoria, titolo pagina, numero eventi per pagina, paginazione degli eventi)
 
 **Opzioni del calendario**:
+
 - titolo pagina
 - imposta il primo giorno della settimana a lunedì
 - numero caratteri dei giorni
