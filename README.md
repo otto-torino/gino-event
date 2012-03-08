@@ -1,10 +1,12 @@
-===================================================================
 event library for gino CMS by Otto Srl, MIT license
 ===================================================================
 Libreria per la gestione di eventi.
-Opzioni: categorie, calendario, selezione (2), ordinamento, aggancio alla newsletter.
+Tra le caratteristiche: categorie, calendario, selezione (2), ordinamento, aggancio alla newsletter, una interfaccia per esporre qualcosa di particolare sul layout (box html).
+La documentazione dell'ultima versione disponibile la si trova qui:    
+http://otto-torino.github.com/gino-event
 
-**CARATTERISTICHE**
+CARATTERISTICHE
+------------------------------
 - titolo
 - categoria (opzionale)
 - data
@@ -18,8 +20,9 @@ Opzioni: categorie, calendario, selezione (2), ordinamento, aggancio alla newsle
 - file allegato
 - geolocalizzazione (longitudine, latitudine)
 - gestione di eventi privati
-  
-**OPZIONI CONFIGURABILI**
+
+OPZIONI CONFIGURABILI
+------------------------------
 - titolo pagina elenco eventi
 - titolo scheda evento
 - titolo ricerca eventi
@@ -42,15 +45,15 @@ Opzioni: categorie, calendario, selezione (2), ordinamento, aggancio alla newsle
 - predisposizione di una pagina personalizzata per gli eventi appartenenti a determinate categorie;
 si possonono indicare fino a quattro categorie (ID della categoria, titolo pagina, numero eventi per pagina, paginazione degli eventi)
 
-Opzioni del calendario:
-
+**Opzioni del calendario**:
 - titolo pagina
 - imposta il primo giorno della settimana a lunedì
 - numero caratteri dei giorni
 - visualizzazione completa
 - posizione degli elementi nella visualizzazione completa (permutazioni tra lista eventi e calendario)
 
-**OUTPUT**
+OUTPUT
+------------------------------
 - calendario
 - blocco html (ad es. per home page)
 - lista eventi futuri o in via di svolgimento
@@ -61,8 +64,10 @@ Opzioni del calendario:
 - ricerca eventi
 - lista eventi per categoria (4)
 
-**INSTALLAZIONE**
+INSTALLAZIONE
+------------------------------
 Per installare questa libreria seguire la seguente procedura:
+
 - creare un pacchetto zip di nome "event_pkg.zip" con tutti i file eccetto il README
 - loggarsi nell'area amministrativa e entrare nella sezione "moduli di sistema"
 - seguire il link (+) "installa nuovo modulo" e caricare il pacchetto creato al primo punto
