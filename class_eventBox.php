@@ -17,7 +17,7 @@ class eventBox extends propertyObject implements eventInt {
 	
 	private function initP($id) {
 	
-		$db = new db;
+		$db = db::instance();
 		$query = "SELECT * FROM ".$this->_tbl_data." WHERE id='$id'";
 		$a = $db->selectquery($query);
 		if(sizeof($a)>0) return $a[0];
@@ -55,7 +55,7 @@ class eventBox extends propertyObject implements eventInt {
 	public static function getAll($instance) {
 	
 		$items = array();
-		$db = new db;
+		$db = db::instance();
 		$query = "SELECT id FROM ".self::$_tbl_item." WHERE instance='$instance' ORDER BY date DESC";
 		$a = $db->selectquery($query);
 		if(sizeof($a))
@@ -65,7 +65,7 @@ class eventBox extends propertyObject implements eventInt {
 	
 	public static function getItem($instance) {
 	
-		$db = new db;
+		$db = db::instance();
 		$query = "SELECT id FROM ".self::$_tbl_item." WHERE instance='$instance' AND active='yes' AND 
 		date=(SELECT MAX(date) FROM ".self::$_tbl_item." WHERE instance='$instance' AND active='yes')";
 		$a = $db->selectquery($query);
@@ -99,7 +99,7 @@ class eventBox extends propertyObject implements eventInt {
 		}
 		if($range) $range = "LIMIT $start,$range";
 		
-		$db = new db;
+		$db = db::instance();
 		$query = "SELECT id FROM ".self::$_tbl_item." $where_query ORDER BY $order $sort $range";
 		$a = $db->selectquery($query);
 		if(sizeof($a))

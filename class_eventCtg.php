@@ -13,7 +13,7 @@ class eventCtg extends propertyObject {
 	
 	private function initP($id) {
 	
-		$db = new db;
+		$db = db::instance();
 		$query = "SELECT * FROM ".self::$_tbl_ctg." WHERE id='$id'";
 		$a = $db->selectquery($query);
 		if(sizeof($a)>0) return $a[0]; 
@@ -30,7 +30,7 @@ class eventCtg extends propertyObject {
 	public static function getAll($instance) {
 	
 		$ctgs = array();
-		$db = new db;
+		$db = db::instance();
 		$query = "SELECT id FROM ".self::$_tbl_ctg." WHERE instance='$instance' ORDER BY name DESC";
 		$a = $db->selectquery($query);
 		if(sizeof($a))

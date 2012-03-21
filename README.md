@@ -1,5 +1,7 @@
 event library for gino CMS by Otto Srl, MIT license
 ===================================================================
+Release 1.1 - Require gino 1.1
+
 Libreria per la gestione di eventi.   
 Tra le caratteristiche: categorie, calendario, selezione (2), ordinamento, aggancio alla newsletter, una interfaccia per esporre qualcosa di particolare sul layout (box html).   
 La documentazione dell'ultima versione disponibile la si trova qui:    
