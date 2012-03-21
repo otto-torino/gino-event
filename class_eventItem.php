@@ -26,7 +26,7 @@ class eventItem extends propertyObject implements eventInt {
 	
 	private function initP($id) {
 	
-		$db = new db;
+		$db = db::instance();
 		$query = "SELECT * FROM ".self::$_tbl_item." WHERE id='$id'";
 		$a = $db->selectquery($query);
 		if(sizeof($a)>0) return $a[0]; 
@@ -221,7 +221,7 @@ class eventItem extends propertyObject implements eventInt {
 		$admin = array_key_exists('admin', $options) ? $options['admin'] : false;
 		$section = array_key_exists('section', $options) ? $options['section'] : false;
 		
-		$db = new DB();
+		$db = db::instance();
 		$interface = $db->getFieldFromId('sys_module', 'name', 'id', $instance);
 		
 		if($section)
@@ -509,7 +509,7 @@ class eventItem extends propertyObject implements eventInt {
 		$id = intval($this->id);
 		if(empty($id)) return false;
 		
-		$db = new db;
+		$db = db::instance();
 		$query = "DELETE FROM ".self::$_tbl_item." WHERE id='$id'";
 		$result = $db->actionquery($query);
 		if($result)
@@ -542,7 +542,7 @@ class eventItem extends propertyObject implements eventInt {
 			if(count($where)) $where_query .= " AND ".implode(" AND ", $where);
 		}
 		
-		$db = new db;
+		$db = db::instance();
 		$query = "SELECT COUNT(id) AS tot FROM ".self::$_tbl_item." $where_query";
 		$a = $db->selectquery($query);
 		return sizeof($a)>0 ? $a[0]['tot'] : 0;
@@ -573,7 +573,7 @@ class eventItem extends propertyObject implements eventInt {
 		}
 		if($range) $range = "LIMIT $start,$range";
 		
-		$db = new db;
+		$db = db::instance();
 		$query = "SELECT id FROM ".self::$_tbl_item." $where_query ORDER BY $order $sort $range";
 		$a = $db->selectquery($query);
 		if(sizeof($a))
@@ -585,7 +585,7 @@ class eventItem extends propertyObject implements eventInt {
 	public static function getDateItems($instance, $date, $ctg=null, $private=false, $bool=false) {
 	
 		$evts = array();
-		$db = new db;
+		$db = db::instance();
 		$where_ctg = ($ctg)?"AND ctg='$ctg'":"";
 		$where_private = ($private)?"":"AND private='no'";
 		$date = "date<='$date' AND ADDDATE(date, INTERVAL duration-1 DAY)>='$date'";
