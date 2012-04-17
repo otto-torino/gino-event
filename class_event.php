@@ -509,7 +509,10 @@ class event extends AbstractEvtClass {
 	
 		$this->accessType($this->_access_base);
 		
-		$GINO = $this->scriptAsset($this->_css_id."_".$this->_instanceName.".css", "calCSS$this->_instance", 'css');
+		$registry = registry::instance();
+		$registry->addCss($this->_class_www."/".$this->_css_id."_".$this->_instanceName.".css");
+		
+		$GINO = '';
 		
 		$item = eventBox::getItem($this->_instance);
 		
@@ -542,8 +545,11 @@ class event extends AbstractEvtClass {
 
 		$htmlsection = new htmlSection(array('id'=>"item_".$this->_css_id."_".$this->_instanceName,'class'=>'public', 'headerTag'=>'header', 'headerLabel'=>$title));
 
-		$GINO = $this->scriptAsset($this->_css_id."_".$this->_instanceName.".css", "calCSS$this->_instance", 'css');
-		$GINO .= $this->scriptAsset($this->_js_file, "calJs", 'js');
+		$registry = registry::instance();
+		$registry->addCss($this->_class_www."/".$this->_css_id."_".$this->_instanceName.".css");
+		$registry->addJs($this->_class_www."/".$this->_js_file);
+		
+		$GINO = '';
 		$GINO .= $evt->show(array("interface"=>$this->_instanceName, "folder"=>$this->pathDirectory($id, 'rel', 'image'), "prefix_img"=>$this->_prefix_img, "prefix_thumb"=>$this->_prefix_thumb, "manage_ctg"=>$this->_manageCtg));
 
 		$htmlsection->content = $GINO;
@@ -555,9 +561,12 @@ class event extends AbstractEvtClass {
 	
 		$this->accessType($this->_access_base);
 		
-		$GINO = $this->scriptAsset($this->_css_id."_".$this->_instanceName.".css", "calCSS$this->_instance", 'css');
-		$GINO .= $this->scriptAsset($this->_js_file, "calJs", 'js');
-
+		$registry = registry::instance();
+		$registry->addCss($this->_class_www."/".$this->_css_id."_".$this->_instanceName.".css");
+		$registry->addJs($this->_class_www."/".$this->_js_file);
+		
+		$GINO = '';
+		
 		$htmlsection = new htmlSection(array('id'=>"list_".$this->_css_id."_".$this->_instanceName,'class'=>'public', 'headerTag'=>'header', 'headerLabel'=>($this->_viewList_title!='NULL'?$this->_viewList_title:"")));
 
 		$options = $this->setValueOptions(array('fromDate'=>date("Y-m-d")));
@@ -608,8 +617,11 @@ class event extends AbstractEvtClass {
 		
 		$this->accessType($this->_access_base);
 		
-		$GINO = $this->scriptAsset($this->_css_id."_".$this->_instanceName.".css", "calCSS$this->_instance", 'css');
-		$GINO .= $this->scriptAsset($this->_js_file, "calJs", 'js');
+		$registry = registry::instance();
+		$registry->addCss($this->_class_www."/".$this->_css_id."_".$this->_instanceName.".css");
+		$registry->addJs($this->_class_www."/".$this->_js_file);
+		
+		$GINO = '';
 
 		$htmlsection = new htmlSection(array('id'=>"list_".$this->_css_id."_".$this->_instanceName,'class'=>'public', 'headerTag'=>'header', 'headerLabel'=>($this->_searchPage_title!='NULL'?$this->_searchPage_title:"")));
 
@@ -642,8 +654,10 @@ class event extends AbstractEvtClass {
 
 		$htmlsection = new htmlSection(array('id'=>"rnd_".$this->_css_id."_".$this->_instanceName,'class'=>'public', 'headerTag'=>'header', 'headerLabel'=>($this->_randomViewer_title!='NULL'?$this->_randomViewer_title:"")));
 
-		$GINO = $this->scriptAsset($this->_css_id."_".$this->_instanceName.".css", "calCSS$this->_instance", 'css');
-		$GINO .= javascript::abiMapLib();
+		$registry = registry::instance();
+		$registry->addCss($this->_class_www."/".$this->_css_id."_".$this->_instanceName.".css");
+		
+		$GINO = javascript::abiMapLib();
 		
 		$rnd_evts = array();
 		$choosen = array();
@@ -674,8 +688,10 @@ class event extends AbstractEvtClass {
 		
 		$htmlsection = new htmlSection(array('id'=>"rnd_".$this->_css_id."_".$this->_instanceName,'class'=>'public', 'headerTag'=>'header', 'headerLabel'=>($this->_selectedViewerA_title!='NULL'?$this->_selectedViewerA_title:"")));
 
-		$GINO = $this->scriptAsset($this->_css_id."_".$this->_instanceName.".css", "calCSS$this->_instance", 'css');
-		$GINO .= javascript::abiMapLib();
+		$registry = registry::instance();
+		$registry->addCss($this->_class_www."/".$this->_css_id."_".$this->_instanceName.".css");
+		
+		$GINO = javascript::abiMapLib();
 		
 		$sels = new selection(0, 0, $this->_instance, eventItem::$_tbl_selection);
 		$events = $sels->getListItems(array('class'=>'eventItem'));
@@ -703,8 +719,10 @@ class event extends AbstractEvtClass {
 		
 		$htmlsection = new htmlSection(array('id'=>"rndSelB_".$this->_css_id."_".$this->_instanceName,'class'=>'public', 'headerTag'=>'header', 'headerLabel'=>($this->_selectedViewerB_title!='NULL'?$this->_selectedViewerB_title:"")));
 
-		$GINO = $this->scriptAsset($this->_css_id."_".$this->_instanceName.".css", "calCSS$this->_instance", 'css');
-		$GINO .= javascript::abiMapLib();
+		$registry = registry::instance();
+		$registry->addCss($this->_class_www."/".$this->_css_id."_".$this->_instanceName.".css");
+		
+		$GINO = javascript::abiMapLib();
 		
 		$sels = new selection(0, 0, $this->_instance, eventItem::$_tbl_selection_b);
 		$events = $sels->getListItems(array('class'=>'eventItem'));
@@ -747,7 +765,10 @@ class event extends AbstractEvtClass {
 		
 		$htmlsection = new htmlSection(array('id'=>"list_".$this->_css_id."_".$this->_instanceName,'class'=>'public', 'headerTag'=>'header', 'headerLabel'=>($this->_personalizedViewer_title!='NULL'?$this->_personalizedViewer_title:"")));
 
-		$GINO = $this->scriptAsset($this->_css_id."_".$this->_instanceName.".css", "calCSS$this->_instance", 'css');
+		$registry = registry::instance();
+		$registry->addCss($this->_class_www."/".$this->_css_id."_".$this->_instanceName.".css");
+		
+		$GINO = '';
 		
 		//$nextWeek = time() + (7*24*60*60);
 		//$nextWeek = date('Y-m-d', $nextWeek);
@@ -790,7 +811,10 @@ class event extends AbstractEvtClass {
 		
 		$this->accessType($this->_access_base);
 		
-		$GINO = $this->scriptAsset($this->_css_id."_".$this->_instanceName.".css", "calCSS$this->_instance", 'css');
+		$registry = registry::instance();
+		$registry->addCss($this->_class_www."/".$this->_css_id."_".$this->_instanceName.".css");
+		
+		$GINO = '';
 		
 		$htmlsection = new htmlSection(array('id'=>"list_".$this->_css_id."_".$this->_instanceName,'class'=>'public', 'headerTag'=>'header', 'headerLabel'=>($this->_archiveViewer_title!='NULL'?$this->_archiveViewer_title:"")));
 
@@ -959,8 +983,10 @@ class event extends AbstractEvtClass {
 
 		$htmlsection = new htmlSection(array('id'=>"ctg".$type."_".$this->_css_id."_".$this->_instanceName,'class'=>'public', 'headerTag'=>'header', 'headerLabel'=>($this->{'_ctgViewer'.$type.'_title'}!='NULL'?$this->{'_ctgViewer'.$type.'_title'}:"")));
 
-		$GINO = $this->scriptAsset($this->_css_id."_".$this->_instanceName.".css", "calCSS$this->_instance", 'css');
-		$GINO .= javascript::abiMapLib();
+		$registry = registry::instance();
+		$registry->addCss($this->_class_www."/".$this->_css_id."_".$this->_instanceName.".css");
+		
+		$GINO = javascript::abiMapLib();
 		
 		$GINO .= "<div id=\"cal_ctg".$type."_list$this->_instance\">".$this->ajaxCtgList($type)."</div>";
 
@@ -1022,9 +1048,11 @@ class event extends AbstractEvtClass {
 		
 		$htmlsection = new htmlSection(array('id'=>"cal_event_".$this->_instanceName,'class'=>'public', 'headerTag'=>'header', 'headerLabel'=>($this->_viewCal_title!='NULL'?$this->_viewCal_title:"")));
 
-		$GINO = $this->scriptAsset($this->_css_id."_".$this->_instanceName.".css", "calCSS$this->_instance", 'css');
-		$GINO .= $this->scriptAsset($this->_js_file, "calJs", 'js');
-		$GINO .= javascript::abiMapLib();
+		$registry = registry::instance();
+		$registry->addCss($this->_class_www."/".$this->_css_id."_".$this->_instanceName.".css");
+		$registry->addJs($this->_class_www."/".$this->_js_file);
+		
+		$GINO = javascript::abiMapLib();
 		$GINO .= $this->render();
 
 		$htmlsection->content = $GINO;
@@ -1552,7 +1580,10 @@ class event extends AbstractEvtClass {
 
 		$htmlsection = new htmlSection(array('class'=>'admin', 'headerTag'=>'header', 'headerLabel'=>_("Gestione eventi"), 'headerLinks'=>$link_insert));
 		
-		$GINO = $this->scriptAsset($this->_css_id."_".$this->_instanceName.".css", "calCSS$this->_instance", 'css');
+		$registry = registry::instance();
+		$registry->addCss($this->_class_www."/".$this->_css_id."_".$this->_instanceName.".css");
+		
+		$GINO = '';
 		
 		$GINO .= "<div id=\"cal_list$this->_instance\">";
 		$GINO .= $this->ajaxAdminItems();
